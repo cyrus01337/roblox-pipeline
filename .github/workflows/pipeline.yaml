@@ -24,8 +24,14 @@ jobs:
               with:
                   submodules: "recursive"
 
-            - name: Setup StyLua
-              uses: JohnnyMorganz/StyLua@v2.5.2
+            - name: Setup Rokit
+              uses: ThatTimothy/setup-rokit@v1
+
+            - name: Install dependencies
+              run: rokit install
+
+            # - name: Setup StyLua
+            #   uses: JohnnyMorganz/StyLua@v2.5.2
 
             - name: Check formatting with StyLua
               run: stylua --check .
