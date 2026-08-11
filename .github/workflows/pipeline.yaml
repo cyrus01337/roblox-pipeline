@@ -67,6 +67,9 @@ jobs:
               with:
                   submodules: "recursive"
 
+            - name: Setup Rokit
+              uses: ThatTimothy/setup-rokit@v1
+
             - name: Download artifact
               uses: actions/download-artifact@v8
 
