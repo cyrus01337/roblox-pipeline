@@ -27,9 +27,6 @@ jobs:
             - name: Setup Rokit
               uses: ThatTimothy/setup-rokit@v1
 
-            - name: Install dependencies
-              run: rokit install
-
             # - name: Setup StyLua
             #   uses: JohnnyMorganz/StyLua@v2.5.2
 
@@ -48,9 +45,6 @@ jobs:
 
             - name: Setup Rokit
               uses: ThatTimothy/setup-rokit@v1
-
-            - name: Install dependencies
-              run: rokit install --no-trust-check
 
             - name: Build
               run: lune run scripts/build-artifact
