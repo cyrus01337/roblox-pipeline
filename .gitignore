@@ -12,6 +12,7 @@
 /*.rbxlx
 /*.rbxm
 /*.rbxmx
+!/template.rbxl
 
 # Misc
 .DS_Store
