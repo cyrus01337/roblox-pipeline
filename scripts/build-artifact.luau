@@ -1,5 +1,3 @@
--- TODO: Cache all service paths for future processing instead of performing the
--- same process necessary to retrieve them N times
 local fs = require("@lune/fs")
 local process = require("@lune/process")
 local roblox = require("@lune/roblox")
@@ -104,31 +102,6 @@ local function createPathToServiceMap(tree: Tree, ancestors: { string }?): PathT
     return map
 end
 
-local function findServiceNameFromPath(path: string): string?
-    -- local pathSegments = path:split("/")
-    -- local resolvablePath = `{pathSegments[1]}/{pathSegments[2]}`
-
-    -- for potentialServiceName, leaf in PROJECT_CONFIGURATION.tree do
-    --     if potentialServiceName:sub(1) == "$" or typeof(leaf) ~= "table" then
-    --         continue
-    --     end
-
-    --     local pathFound = leaf["$path"]
-    --     local nestedServiceName, nestedPathFound = findPath(leaf)
-
-    --     if
-    --         pathFound and pathFound:sub(0, #resolvablePath) == resolvablePath
-    --         or nestedPathFound and nestedPathFound:sub(#resolvablePath) == resolvablePath
-    --     then
-    --         return potentialServiceName
-    --     elseif not pathFound and nestedPathFound and nestedPathFound:sub(0, #resolvablePath) == resolvablePath then
-    --         return nestedServiceName
-    --     end
-    -- end
-
-    -- return nil
-end
-
 local function normaliseScriptFileName(fileName: string): { string }
     local name, centerOrTail = table.unpack(fileName:split("."))
 
@@ -143,55 +116,6 @@ local function normaliseScriptFileName(fileName: string): { string }
     error(`Invalid filename provided: {fileName}`)
 end
 
-local function findBaseScript(path: string, location: Instance): Instance?
-    local currentLocation = location
-    local fragments = path:split("/")
-    local fileName = fragments[#fragments]
-    local baseScriptName, expectedInstanceType = table.unpack(normaliseScriptFileName(fileName))
-
-    for _, name in path:split("/") do
-        local newLocationFound = currentLocation:FindFirstChild(name)
-
-        if not newLocationFound then
-            -- TODO: Add a way to differentiate between this function giving nil
-            -- because the location doesn't exist, and the function giving nil
-            -- because the base script doesn't exist
-            return nil
-        end
-
-        currentLocation = newLocationFound
-    end
-
-    local baseScriptFound = currentLocation:FindFirstChild(baseScriptName)
-
-    if not (baseScriptFound or baseScriptFound:IsA(expectedInstanceType)) then
-        return nil
-    end
-
-    return baseScriptFound
-end
-
-local function createInGamePath(service: Instance, pathSegments: { string }): Instance
-    local currentLocation = service
-
-    for _, segment in pathSegments do
-        local newLocationFound = currentLocation:FindFirstChild(segment)
-
-        if newLocationFound then
-            currentLocation = newLocationFound
-
-            continue
-        end
-
-        newLocationFound = roblox.Instance.new("Folder")
-        newLocationFound.Name = segment
-        newLocationFound.Parent = currentLocation
-        currentLocation = newLocationFound
-    end
-
-    return currentLocation
-end
-
 local function main(...): ()
     local START_TIME = os.clock()
     local projectConfiguration: Configuration = serde.decode("json", fs.readFile("default.project.json"))
@@ -200,46 +124,6 @@ local function main(...): ()
 
     print(`Building artifact in {process.cwd}\n`)
 
-    -- for _, filePath in walkFilesRecursively("src") do
-    --     local pathSegments = filePath:split("/")
-    --     local resolvablePath = ""
-
-    --     for position = 3, #pathSegments do
-    --         resolvablePath ..= `{pathSegments[position]}`
-
-    --         if position < #pathSegments then
-    --             resolvablePath ..= "/"
-    --         end
-    --     end
-
-    --     local serviceNameFound = findServiceNameFromPath(filePath)
-
-    --     if not serviceNameFound then
-    --         error(`Unable to locate service for {filePath}`)
-    --     elseif serviceNameFound == "StarterPlayerScripts" then
-    --         serviceNameFound = "StarterPlayer"
-    --     end
-
-    --     local service = template:GetService(serviceNameFound)
-    --     local baseScriptFound = findBaseScript(resolvablePath, service)
-
-    --     if baseScriptFound then
-    --         print("Found base script for", filePath, "at", baseScriptFound)
-    --     end
-
-    --     if not baseScriptFound then
-    --         print("Creating in-game path for", filePath)
-
-    --         local fileName = table.remove(pathSegments, table.find(pathSegments, pathSegments[#pathSegments]))
-    --         print(fileName, normaliseScriptFileName(fileName))
-    --         local baseScriptName, expectedInstanceType = table.unpack(normaliseScriptFileName(fileName))
-    --         baseScriptFound = roblox.Instance.new(expectedInstanceType)
-    --         baseScriptFound.Name = baseScriptName
-    --         baseScriptFound.Parent = createInGamePath(service, pathSegments)
-    --     end
-
-    --     baseScriptFound.Source = fs.readFile(filePath)
-    -- end
     for _, filePath in walkFilesRecursively("src") do
         local pathSegments = filePath:split("/")
         local fileName = pathSegments[#pathSegments]
