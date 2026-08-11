@@ -1,6 +1,7 @@
 # ROBLOX Pipeline
+Example project that automates template/place modification and publishing for Roblox games
 
-### Setup
+## Setup
 1. Fork repository
 2. Create Developer API key as shown [here](https://create.roblox.com/docs/en-us/cloud/guides/usage-place-publishing#publish-a-place) ([documentation](https://create.roblox.com/docs/en-us/cloud/auth/api-keys#create-api-keys))
 3. Add the following repository secrets (or environment secrets if you prefer
