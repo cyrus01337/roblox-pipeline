@@ -17,3 +17,4 @@ local response = net.request({
 })
 
 print(response.statusCode, response.statusMessage)
+process.exit(if response.status == 200 then 0 else 1)
