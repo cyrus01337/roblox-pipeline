@@ -11,4 +11,9 @@ API_KEY="..."
 PLACE_ID="..."
 UNIVERSE_ID="..."
 ```
-4. Push changes to `src/`
+4. **Read the contents of** the initialisation script, then run it:
+```bash
+# cat/bat/less/more ./initialise
+./initialise
+```
+5. Push changes to `src/`
