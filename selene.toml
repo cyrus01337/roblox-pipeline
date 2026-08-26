@@ -1,1 +1,2 @@
+exclude = ["*Packages/*"]
 std = "roblox"
