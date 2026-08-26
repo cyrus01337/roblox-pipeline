@@ -116,7 +116,7 @@ local function normaliseScriptFileName(fileName: string): { string }
     error(`Invalid filename provided: {fileName}`)
 end
 
-local function main(...): ()
+local function main(): ()
     local START_TIME = os.clock()
     local projectConfiguration: Configuration = serde.decode("json", fs.readFile("default.project.json"))
     local pathToServiceMap = createPathToServiceMap(projectConfiguration.tree)
