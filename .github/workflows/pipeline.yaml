@@ -28,9 +28,6 @@ jobs:
             - name: Setup Rokit
               uses: ThatTimothy/setup-rokit@v1
 
-            # - name: Setup StyLua
-            #   uses: JohnnyMorganz/StyLua@v2.5.2
-
             - name: Check formatting with StyLua
               run: stylua --check .
 
@@ -65,8 +62,6 @@ jobs:
         steps:
             - name: Checkout
               uses: actions/checkout@v7
-              with:
-                  submodules: "recursive"
 
             - name: Setup Rokit
               uses: ThatTimothy/setup-rokit@v1
@@ -80,5 +75,4 @@ jobs:
                   API_KEY: ${{ secrets.API_KEY }}
                   PLACE_ID: ${{ secrets.PLACE_ID }}
                   UNIVERSE_ID: ${{ secrets.UNIVERSE_ID }}
-
               run: lune run scripts/publish-artifact
