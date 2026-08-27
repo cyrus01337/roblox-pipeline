@@ -26,6 +26,12 @@ type PathToServiceMap = {
 
 type Instance = roblox.Instance
 
+local function getFileExtension(path): string
+    local components = path:split(".")
+
+    return components[#components]
+end
+
 local function walkFilesRecursively(path: string): { string }
     local paths = {}
 
@@ -34,6 +40,12 @@ local function walkFilesRecursively(path: string): { string }
     end
 
     for _, objectName in fs.readDir(path) do
+        local fileExtension = getFileExtension(objectName)
+
+        if fileExtension ~= "luau" then
+            continue
+        end
+
         local objectPath = `{path}/{objectName}`
 
         if fs.isFile(objectPath) then
@@ -46,6 +58,8 @@ local function walkFilesRecursively(path: string): { string }
             table.insert(paths, walkedPath)
         end
     end
+
+    process.exit(1)
 
     return paths
 end
