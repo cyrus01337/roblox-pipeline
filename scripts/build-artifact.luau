@@ -59,8 +59,6 @@ local function walkFilesRecursively(path: string): { string }
         end
     end
 
-    process.exit(1)
-
     return paths
 end
 
